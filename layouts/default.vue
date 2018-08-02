@@ -19,6 +19,9 @@ html {
 *, *:before, *:after {
   box-sizing: border-box;
   margin: 0;
+  padding: 0;
+  border: 0;
+  vertical-align: baseline;
 }
 
 .button--green {
@@ -50,4 +53,3 @@ html {
   background-color: #35495e;
 }
 </style>
-

@@ -1,65 +1,62 @@
-<template>
-  <section class="container">
-    <div>
-      <app-logo/>
-      <h1 class="title">
-        tiled-gallery
-      </h1>
-      <h2 class="subtitle">
-        An examplte template for prospective clients.
-      </h2>
-      <div class="links">
-        <a
-          href="https://nuxtjs.org/"
-          target="_blank"
-          class="button--green">Documentation</a>
-        <a
-          href="https://github.com/nuxt/nuxt.js"
-          target="_blank"
-          class="button--grey">GitHub</a>
-      </div>
-    </div>
+<template lang="html">
+  <section id="m-gallery" class="m-gallery">
+    <a-galleryImage
+    v-for="image in images"
+    :key="image.id"
+    :imgSrc="'https://picsum.photos/400/' + size + '/?image=' + image.id ">
+  </a-galleryImage>
   </section>
 </template>
 
 <script>
-import AppLogo from '~/components/AppLogo.vue'
+import GalleryImage from "~/components/GalleryImage.vue"
+import fetch from 'node-fetch'
+
+//https://api.unsplash.com/photos/?client_id="+this.client_id
 
 export default {
+  name: 'm-gallery',
   components: {
-    AppLogo
+    'a-galleryImage': GalleryImage
+  },
+
+  data() {
+    return{
+      images: [],
+      size: "400",
+      limit: 9
+    }
+  },
+
+  created() {
+    this.fetchImages()
+  },
+
+  methods: {
+    fetchImages() {
+      fetch("https://picsum.photos/list")
+      .then((resp) => resp.json())
+      .then((data) => {
+        var start = 50;
+        this.images = data.slice(start, start+this.limit)
+      })
+    }
   }
 }
 </script>
 
-<style>
-.container {
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-}
+<style lang="css">
+  .m-gallery {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    place-items: center;
+    place-content: center;
 
-.title {
-  font-family: "Quicksand", "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; /* 1 */
-  display: block;
-  font-weight: 300;
-  font-size: 100px;
-  color: #35495e;
-  letter-spacing: 1px;
-}
+    grid-column-gap: 40px;
+    grid-row-gap: 40px;
 
-.subtitle {
-  font-weight: 300;
-  font-size: 42px;
-  color: #526488;
-  word-spacing: 5px;
-  padding-bottom: 15px;
-}
-
-.links {
-  padding-top: 15px;
-}
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+  }
 </style>
-
